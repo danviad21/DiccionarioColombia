@@ -21,7 +21,7 @@
 <body>
 	<div class="box-contain">
 		<header class="box-header">
-			<input id="boxSearching" type="text" placeholder="Escriba su Palabra" class="search" />
+			<input  id="boxSearching" type="text" placeholder="Escriba su Palabra" class="search" />
 		</header>
 		<div class="main-body">
 			<section class="definition">
@@ -45,9 +45,9 @@
 			</section>
 			<aside class="suggested-words">
 				<span>Palabras Sugeridas</span>
-				<!--				<h2 class"no-sugg" th:text="${message}"></h2>-->
-				<ul class="words" th:each="words: ${suggest}" th:unless="${!suggest}">
-					<li th:text="${words}"><a href="#"></a></li>
+				<ul class="words">
+					<li th:each="words: ${suggest}" th:data="${words}" onclick="javascript:buscar(this.getAttribute('data'))"><a  th:text="${words}" href="#"></a></li>
+<!--					'javascript:buscar(\'' + [[${words}]] + '\');'-->
 				</ul>
 			</aside>
 		</div>

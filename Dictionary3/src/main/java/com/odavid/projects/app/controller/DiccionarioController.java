@@ -5,6 +5,7 @@
  */
 package com.odavid.projects.app.controller;
 
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 
@@ -16,6 +17,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.odavid.projects.app.service.external.DefinitionsApi;
 import com.odavid.projects.app.service.external.ImagesApi;
+import com.odavid.projects.app.services.BusquedadLocal;
 
 /**
  *
@@ -26,6 +28,7 @@ public class DiccionarioController {
 
 	private DefinitionsApi definitionApi;
 	private ImagesApi imagesApi;
+	private BusquedadLocal busquedadLocal;
 
 	@GetMapping("/")
 	public String home(Model model) {
@@ -34,16 +37,29 @@ public class DiccionarioController {
 
 	@GetMapping("/search/{word}")
 	public String searchWord(@PathVariable("word") String word, RedirectAttributes redirectAttributes) {
+		Map<String, Object> imagesResult;
+		Map<String, Object> resultadoLocal;
+
+		this.busquedadLocal = new BusquedadLocal();
 		this.definitionApi = new DefinitionsApi();
+
+		resultadoLocal = this.busquedadLocal.busquedadPalabra(word);
+
 		Map<String, Object> results = this.definitionApi.findingWord(word);
 
 		if (results.get("error") != null) {
 			System.out.println("error en servidor");
+
 		} else if (results.get("no_definition") != null) {
-			System.out.println("no hay definiciones");
+
+			if (resultadoLocal.get("coincidencias") != null) {
+				LinkedHashSet<String> resultadosLocales = (LinkedHashSet<String>) resultadoLocal.get("coincidencias");
+
+				redirectAttributes.addFlashAttribute("word", "Definicion");
+				redirectAttributes.addFlashAttribute("definitions", resultadosLocales);
+			}
+
 		} else {
-			System.out.println("todo bien");
-			Map<String, Object> imagesResult;
 			String definition = "";
 
 			List<String> listDefinitions = (List<String>) results.get("definitions");
@@ -51,8 +67,14 @@ public class DiccionarioController {
 			for (String definitionTemp : listDefinitions) {
 				definition += definitionTemp + "   ";
 			}
-			redirectAttributes.addFlashAttribute("word", results.get("rightWord"));
+			word = results.get("rightWord").toString();
+			redirectAttributes.addFlashAttribute("word", word);
 			redirectAttributes.addFlashAttribute("definitions", definition);
+
+			if (resultadoLocal.get("coincidencias") != null) {
+				LinkedHashSet<String> resultadosLocales = (LinkedHashSet<String>) resultadoLocal.get("coincidencias");
+				redirectAttributes.addFlashAttribute("suggest", resultadosLocales);
+			}
 
 			this.imagesApi = new ImagesApi();
 			imagesResult = this.imagesApi.findingImage(word);
@@ -64,7 +86,7 @@ public class DiccionarioController {
 			} else {
 
 				@SuppressWarnings("unchecked")
-				List<String> listImages = (List<String>) imagesResult.get("images");	
+				List<String> listImages = (List<String>) imagesResult.get("images");
 				redirectAttributes.addFlashAttribute("images", listImages);
 			}
 		}

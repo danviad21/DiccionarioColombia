@@ -40,11 +40,11 @@ public class DefinitionsApi {
 		HttpHeaders headers = new HttpHeaders();
 
 		headers.setAccept(Arrays.asList(MediaType.APPLICATION_JSON));
-		
+
 		HttpEntity<String> entity = new HttpEntity<>(headers);
 
 		try {
-			String response = this.restTempalte.exchange("https://api.dictionaryapi.dev/api/v2/entries/es/"+word,
+			String response = this.restTempalte.exchange("https://api.dictionaryapi.dev/api/v2/entries/es/" + word,
 					HttpMethod.GET, entity, String.class).getBody();
 			JSONParser parser = new JSONParser();
 
@@ -56,7 +56,6 @@ public class DefinitionsApi {
 				Iterator<?> iterator = jsonDefinitions.iterator();
 				while (iterator.hasNext()) {
 					String definition = ((JSONObject) iterator.next()).get("definition").toString();
-					System.out.println(definition);
 					definitions.add(definition);
 				}
 

@@ -160,6 +160,15 @@ body:before {
   padding: 4px 0;
 }
 
+.suggested-words .words li:hover{
+	background-color: darkorange;
+	
+}
+.suggested-words .words li > a:hover{
+	color:#eeeeee;
+	
+}
+
 .suggested-words .words li a,
 .suggested-words .words li a:visited {
   color: black;
@@ -168,7 +177,7 @@ body:before {
 
 .words li:focus-within,
 .words li a:focus-within {
-  color: white !important;
+  color: #eeeeee !important;
   background-color: darkcyan;
 }
 
