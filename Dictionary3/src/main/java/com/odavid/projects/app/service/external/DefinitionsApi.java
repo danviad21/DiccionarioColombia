@@ -61,7 +61,7 @@ public class DefinitionsApi {
 
 				foundWord.put("definitions", definitions);
 			} catch (ParseException ex) {
-				foundWord.put("error", "Error al realizar la peticion");
+				foundWord.put("error", "Error al realizar la peticion. Asegurese de tener internet");
 				return foundWord;
 			}
 		} catch (HttpStatusCodeException e) {

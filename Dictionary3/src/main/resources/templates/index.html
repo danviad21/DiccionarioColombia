@@ -14,11 +14,14 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 	<link rel="stylesheet" th:href="@{/css/styles.css}" />
-	<title>Dictionary</title>
 </head>
 <!--"En gramática tradicional, una palabra (del latín parabŏla) es una unidad de significado que se separa de las demás mediante pausas potenciales en el habla y blancos en la escritura. Es una unidad de la lengua que resulta muy fácil de identificar, tanto en el habla, en las señas, como en la escritura.-->
 
 <body>
+	<div class="cover-page">
+		<p> Project's name: <strong>xxxx</strong></p>
+		<p>Made by: <strong>Laura Zarate</strong></p>
+	</div>
 	<div class="box-contain">
 		<header class="box-header">
 			<input  id="boxSearching" type="text" placeholder="Escriba su Palabra" class="search" />
@@ -27,17 +30,13 @@
 			<section class="definition">
 				<h3 th:unless="${word}">Definicion</h3>
 				<h3 th:unless="!${word}" th:text=${word}>Definicion2</h3>
-				<p th:unless="${definitions}">En gramática tradicional, una palabra (del latín parabŏla) es una unidad
+				<p th:unless="${definitions}">[TEXTO DE MUESTRA POR DEFAULT]<br>En gramática tradicional, una palabra (del latín parabŏla) es una unidad
 					de significado que se separa de las demás mediante pausas potenciales en el habla y blancos en la
 					escritura. Es una unidad de la lengua que resulta muy fácil de identificar, tanto en el habla, en
 					las señas, como en la escritura.</p>
 				<p th:unless="!${definitions}" th:text="${definitions}"></p>
 				<div th:unless="${images}" id="images" class="img-search">
-					<img src="https://miro.medium.com/max/1600/1*1P6cH6aaTqWEIdN0KZWkxA.jpeg" alt="hola">
-					<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQxBKo4hc98D9kPNtzCS4Hzw8byoDr5tbo6cqD1dktgtagwAt97KFAFXJy8u1WmiemGaSE&usqp=CAU"
-						alt="">
-					<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTbwK17EbZ7JsiH75sLmeVf1aPR-DQM9GCOVoiDVP2RXX6iJWtrnPnUBpGgFc9RXgsG-qs&usqp=CAU"
-						alt="">
+					<img th:src="@{img/img-default.jpeg}" alt="hola">
 				</div>
 				<div th:unless="!${images}" id="images" class="img-search">
 					<img  th:each="imageItem: ${images}" th:src="${imageItem}">

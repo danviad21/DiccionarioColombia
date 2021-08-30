@@ -16,56 +16,91 @@ public class BusquedadLocal {
 
 	}
 
-	public String reemplazaLetras(Set<String> diccionario, String palabra) {
-		if (palabra.contains("*v*")) {
-			if (diccionario.contains(palabra = palabra.replace('v', 'b'))) {
-				return palabra;
+	public void reemplazaLetras(Set<String> coincidencias, Set<String> diccionario, String p_palabra) {
+		String palabra = p_palabra;
+		if (palabra.contains("v")) {
+			 palabra = palabra.replace('v', 'b');
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
 			}
-		} else if (palabra.contains("b")) {
-			if (diccionario.contains(palabra = palabra.replace('b', 'v'))) {
-				return palabra;
-			}
-		} else if (palabra.contains("n")) {
-			if (diccionario.contains(palabra = palabra.replace('n', 'm'))) {
-				return palabra;
-			}
-		} else if (palabra.contains("m")) {
-			if (diccionario.contains(palabra = palabra.replace('m', 'n'))) {
-				return palabra;
-			}
-		} else if (palabra.contains("s")) {
-			if (diccionario.contains(palabra = palabra.replace('s', 'z'))) {
-				return palabra;
-			}
-		} else if (palabra.contains("z")) {
-			if (diccionario.contains(palabra = palabra.replace('z', 's'))) {
-				return palabra;
-			}
-		} else if (palabra.contains("y")) {
-			if (diccionario.contains(palabra = palabra.replace('y', 'i'))) {
-				return palabra;
-			}
-		} else if (palabra.contains("i")) {
-			if (diccionario.contains(palabra = palabra.replace('i', 'y'))) {
-				return palabra;
-			}
-		} else if (Pattern.compile("^(a|e|i|o|u)+[a-z]*?").matcher(palabra).matches()) {
-			if (diccionario.contains(palabra = "h" + "palabra")) {
-				return palabra;
-			}
-		} else if (palabra.contains("h")) {
-			if (diccionario.contains(palabra = palabra.replace('h', ' '))) {
-				return palabra;
-			}
+			palabra = p_palabra;
 		}
-		return null;
+		if (palabra.contains("b")) {
+			palabra = palabra.replace('b', 'v');
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
+			}
+			palabra = p_palabra;
+		}
 
+		if (palabra.contains("n")) {
+			palabra = palabra.replace('n', 'm');
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
+			}
+			palabra = p_palabra;
+		}
+		
+		if (palabra.contains("m")) {
+			palabra = palabra.replace('m', 'n');
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
+			}
+			palabra = p_palabra;
+		}
+
+		if (palabra.contains("s")) {
+			palabra  = palabra.replace('s', 'z');
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
+			}
+			palabra = p_palabra;
+		}
+
+		if (palabra.contains("z")) {
+			palabra = palabra.replace('z', 's');
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
+			}
+			palabra = p_palabra;
+		}
+
+		if (palabra.contains("y")) {
+			palabra = palabra.replace('y', 'i');
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
+			}
+			palabra = p_palabra;
+		}
+
+		if (palabra.contains("i")) {
+			palabra = palabra.replace('i', 'y');
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
+			}
+			palabra = p_palabra;
+		}
+
+		if (Pattern.compile("^(a|e|i|o|u)+[a-z]*?").matcher(palabra).matches()) {
+			palabra = "h" + palabra;
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
+			}
+			palabra = p_palabra;
+		}
+
+		if (palabra.contains("h")) {
+			palabra = palabra.replace('h', ' ');
+			if (diccionario.contains(palabra)) {
+				coincidencias.add(palabra);
+			}
+			palabra = p_palabra;
+		}
 	}
 
 	public Map<String, Object> busquedadPalabra(String palabra) {
 
 		Map<String, Object> resultado = new HashMap<>();
-		String palabraNueva;
 		ManejoArchivos archivos = new ManejoArchivos(this.diccionarioLocal);
 		archivos.lecturaArchivo();
 		LinkedHashSet<String> diccionarioTemp = new LinkedHashSet<>();
@@ -77,12 +112,9 @@ public class BusquedadLocal {
 				if (cadena.length() <= palabra.length() + 2 && cadena.length() >= palabra.length() - 2) {
 					diccionarioTemp.add(cadena);
 				}
+				System.out.print(diccionarioTemp.contains("humano"));
 			}
-
-			palabraNueva = reemplazaLetras(coincidencias, palabra);
-			if (palabraNueva != null) {
-				coincidencias.add(palabraNueva);
-			}
+			reemplazaLetras(coincidencias, diccionarioTemp, palabra);
 
 			for (String cadena : diccionarioTemp) {
 				if (cadena.length() == palabra.length()) {
@@ -95,15 +127,17 @@ public class BusquedadLocal {
 							contador++;
 						}
 					}
+
 					if (contador < 2) {
 						coincidencias.add(cadena);
 					}
 				}
 			}
+
 			if (!diccionarioTemp.isEmpty()) {
 				resultado.put("coincidencias", coincidencias);
 			} else {
-				resultado.put("nohay", "No Hay Sugerencias");
+				resultado.put("nohay", "No existen la palabra en el diccionario");
 			}
 		} else {
 			resultado.put("incorrecto", ValidacionManualTexto.validacionBasicaCadena(palabra));

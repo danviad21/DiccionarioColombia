@@ -16,7 +16,7 @@ body {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: space-around;
   flex-wrap: nowrap;
   border: none;
 }
@@ -32,9 +32,16 @@ body:before {
   z-index: 2;
 }
 
+.cover-page{
+	color:#ffffff;
+	font-size: 45px;
+	left:0;
+	z-index: 5;
+}
+
 .box-contain {
   z-index: 3;
-  width: 550px;
+  width: 720px;
   height: 600px;
   display: flex;
   flex-direction: column;
@@ -84,7 +91,7 @@ body:before {
   flex-direction: column;
   align-items: center;
   text-align: justify;
-  padding: 0 5px;
+  padding: 0 15px;
   border-right: 1px solid #dddddd;
 }
 
@@ -103,7 +110,10 @@ body:before {
 	min-height: 	180px;
 	max-height: 	180px;
 	height: 180px;
+	line-height: 22px;
   overflow: auto;
+    scrollbar-width: thin !important;
+  scrollbar-color: #003960 #eeeeee;
 }
 
 .img-search {

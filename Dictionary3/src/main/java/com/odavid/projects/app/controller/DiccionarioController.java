@@ -37,41 +37,52 @@ public class DiccionarioController {
 
 	@GetMapping("/search/{word}")
 	public String searchWord(@PathVariable("word") String word, RedirectAttributes redirectAttributes) {
+		Map<String, Object> results;
 		Map<String, Object> imagesResult;
 		Map<String, Object> resultadoLocal;
 
-		this.busquedadLocal = new BusquedadLocal();
 		this.definitionApi = new DefinitionsApi();
+		this.busquedadLocal = new BusquedadLocal();
 
+		results = this.definitionApi.findingWord(word);
 		resultadoLocal = this.busquedadLocal.busquedadPalabra(word);
 
-		Map<String, Object> results = this.definitionApi.findingWord(word);
-
 		if (results.get("error") != null) {
-			System.out.println("error en servidor");
+			redirectAttributes.addFlashAttribute("definitions", results.get("error"));
 
 		} else if (results.get("no_definition") != null) {
 
 			if (resultadoLocal.get("coincidencias") != null) {
+
+				@SuppressWarnings("unchecked")
 				LinkedHashSet<String> resultadosLocales = (LinkedHashSet<String>) resultadoLocal.get("coincidencias");
 
-				redirectAttributes.addFlashAttribute("word", "Definicion");
-				redirectAttributes.addFlashAttribute("definitions", resultadosLocales);
+				redirectAttributes.addFlashAttribute("word", word);
+				redirectAttributes.addFlashAttribute("definitions",
+						"No existe definicion para la palabra requerida.  Intente con alguna sugerencia de la lista o re-escriba su palabra");
+				redirectAttributes.addFlashAttribute("suggest", resultadosLocales);
+			} else {
+				redirectAttributes.addFlashAttribute("word", word);
+				redirectAttributes.addFlashAttribute("definitions", "Palabra o Frase Invalida:  "+resultadoLocal.get("incorrecto"));
+
 			}
 
 		} else {
 			String definition = "";
 
+			@SuppressWarnings("unchecked")
 			List<String> listDefinitions = (List<String>) results.get("definitions");
 
 			for (String definitionTemp : listDefinitions) {
 				definition += definitionTemp + "   ";
 			}
+
 			word = results.get("rightWord").toString();
 			redirectAttributes.addFlashAttribute("word", word);
 			redirectAttributes.addFlashAttribute("definitions", definition);
 
 			if (resultadoLocal.get("coincidencias") != null) {
+				@SuppressWarnings("unchecked")
 				LinkedHashSet<String> resultadosLocales = (LinkedHashSet<String>) resultadoLocal.get("coincidencias");
 				redirectAttributes.addFlashAttribute("suggest", resultadosLocales);
 			}

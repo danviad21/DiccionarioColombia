@@ -5,7 +5,7 @@ import java.util.regex.Pattern;
 public class ValidacionManualTexto {
 
 	private static final String CARACTERES_INVALIDOS = "[0-9]+|[\\+\\*\\/&]";
-	private static final String CONSONANTES_SEGUIDOS_INVALIDOS = "[b-df-hj-np-tv-z]{3,}";
+	private static final String CONSONANTES_SEGUIDOS_INVALIDOS = "[b-df-hj-np-tv-z]{4,}";
 	private static final String VOCALES_SEGUIDAS_INVALIDOS = "(a|e|i|o|u){4,}";
 	private static final String CANTIDAD_VOCALES_SEGUIDAS_VALIDAS = "(a|e|i|o|u){3}";
 	private static final String TRIPTONGO_VALIDO = "(u|i)(a|e|o)(u|i)";
